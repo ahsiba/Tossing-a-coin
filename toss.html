@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        round = 0
+        toss = 1
+        headcount1 = 0
+        headcount2 = 0
+        let playerHeadsInRound = 0
+        let computerHeadsInRound = 0
+        //Setting time:-
+        function timing() {
+           
+            a = setInterval(() => {
+                round++
+                tossing()
+                if (round == (10 * toss)) {
+                    clearInterval(a)
+                    toss++
+                    counting()
+                    result()
+                }
+            }, 1000);
+        }
+        playerRandom = []
+        computerRandom = []
+        obj = { player: 0, computer: 0 }
+        //tossing player and computer:-
+        function tossing() {
+            coin = ["head", "tail"]
+            //playerHeadsInRound & computerHeadsInRound
+            person1Random = (coin[Math.floor(Math.random() * coin.length)])
+            computer1Random = (coin[Math.floor(Math.random() * coin.length)])
+            playerRandom.push(person1Random)
+            computerRandom.push(computer1Random)
+            console.log("Player : " + person1Random);
+            console.log("computer: " + computer1Random);
+            if (person1Random === "head") {
+                playerHeadsInRound++
+            } 
+            if(computer1Random ==="head"){
+                computerHeadsInRound++
+            }
+            if (person1Random == "head") {
+                obj.player++
+            } else {
+                obj.computer++
+            }
+        }
+        //counting head of player and computer:-
+        function counting() {
+            console.log("................................");
+            console.log("person head in Round:", playerHeadsInRound);
+            console.log("computer head in Round : ", computerHeadsInRound);
+            headcount1 = playerRandom.filter(n => n === 'head').map(n => n = 1).reduce((sum, n) => sum + n, 0)
+            headcount2 = computerRandom.filter(n => n === 'head').map(n => n = 1).reduce((sum, n) => sum + n, 0)
+            console.log("................................");
+            console.log("Total person head :", headcount1);
+            console.log("Total computer head: ", headcount2);
+            playerHeadsInRound = 0
+            computerHeadsInRound = 0
+        }
+        //overall result of winner:-
+        function finalresult() {
+            console.log(">>>>>>>>>>Overall Winner<<<<<<<<<<<<");
+            if (obj.player >   obj.computer) {
+                console.log("PLAYER");
+            } else if (obj.player < obj.computer) {
+                console.log("COMPUTER");
+            } else {
+                console.log("DRAW");
+            }
+            console.log(playerRandom, computerRandom);
+            cs = ""
+            cs += "toss,player,computer"
+            cs += "\r\n"
+            for (let i = 0; i < 40; i++) {
+                cs += (i + 1) + "," + playerRandom[i] + "," + computerRandom[i]
+                cs += "\r\n"
+            }
+            console.log(cs);
+            let tempBlob = new Blob([cs], { type: "text\csv" })
+            let tempURL = window.URL.createObjectURL(tempBlob)
+            let activation = document.createElement("a")
+            activation.href = tempURL
+            activation.download = "abi.csv"
+            activation.click()
+            window.URL.revokeObjectURL(tempURL)
+            activation.remove()
+        }
+        //Each round winner:-
+        function result() {
+            if (headcount1 < headcount2) {
+                console.log(".........computer win...........");
+            } else if (headcount1 > headcount2) {
+                console.log("............person win..........");
+
+            } else {
+                console.log("...........draw..............");
+            }
+            setTimeout(() => {
+                if (toss <= 4) {
+                    timing()
+                } else {
+                    finalresult()
+                }
+            }, 5000)
+        }
+        timing()
+    </script>
+</body>
+
+</html>
